@@ -22,6 +22,8 @@ interface HttpRequestInterface
 
     public function post($key);
 
+    public function server($key);
+
     public function delete($key);
 
     public function put($key);

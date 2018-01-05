@@ -96,7 +96,6 @@ class Logger implements LoggerInterface
 
         if (!file_exists($file)) {
             touch($file);
-            
             $handle = fopen($file, 'r+');
             exec("chmod 777" . $file);
         } else {

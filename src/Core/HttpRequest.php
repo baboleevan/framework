@@ -541,6 +541,18 @@ class HttpRequest implements HttpRequestInterface
         return $this->session->$key;
     }
 
+
+    /**
+     * get a PUT Value using key
+     *
+     * @param $key
+     * @return mixed
+     */
+    public function server($key)
+    {
+        return $this->server->$key;
+    }
+
     /**
      * get all request info
      * @return array
