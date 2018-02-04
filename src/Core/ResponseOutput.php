@@ -99,8 +99,10 @@ class ResponseOutput
         header("{$key}: {$value}");
     }
 
+
     /**
-     * @return mixed
+     * @return null
+     * @throws \Exception
      */
     public function output()
     {
@@ -115,19 +117,29 @@ class ResponseOutput
             case ResponseType::JSON:
                 $this->addHeader("Content-type", "application/json");
 
-                if ($this->isDisplayCode == true) {
-                    return json_encode(array('code' => $this->bodyCode, 'message' => "{$this->bodyMessage}{$this->bodyAddMessage}", 'body' => $this->bodyData));
+                if ($this->responseStatusCode == 200) {
+                    if ($this->isDisplayCode == true) {
+                        return json_encode(array('code' => $this->bodyCode, 'message' => "{$this->bodyMessage}{$this->bodyAddMessage}", 'body' => $this->bodyData));
+                    } else {
+                        return json_encode($this->bodyData);
+                    }
                 } else {
-                    return json_encode($this->bodyData);
+                    return json_encode(array('code' => $this->bodyCode, 'message' => "{$this->bodyMessage}{$this->bodyAddMessage}"));
                 }
+
+
             case ResponseType::XML:
                 $this->addHeader("Content-type", "text/xml; charset=utf-8");
-
                 echo '<?xml version="1.0" encoding="utf-8"?>';
-                if ($this->isDisplayCode == true) {
-                    return Parser::arrayToXml(array('code' => $this->bodyCode, 'message' => "{$this->bodyMessage}{$this->bodyAddMessage}", 'body' => $this->bodyData));
+
+                if ($this->responseStatusCode == 200) {
+                    if ($this->isDisplayCode == true) {
+                        return Parser::arrayToXml(array('code' => $this->bodyCode, 'message' => "{$this->bodyMessage}{$this->bodyAddMessage}", 'body' => $this->bodyData));
+                    } else {
+                        return Parser::arrayToXml($this->bodyData);
+                    }
                 } else {
-                    return Parser::arrayToXml($this->bodyData);
+                    return Parser::arrayToXml(array('code' => $this->bodyCode, 'message' => "{$this->bodyMessage}{$this->bodyAddMessage}"));
                 }
             case ResponseType::HTML:
                 $this->addHeader("Content-type", "text/html");
